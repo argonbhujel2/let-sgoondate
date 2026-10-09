@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card awaiting-card fade-in">
+    <div class="emoji-bounce">⏳</div>
+    <h1 class="main-heading">Almost there…</h1>
+    <p class="subtitle">Your payment is awaiting verification 💗</p>
+
+    <div class="status-box">
+        <p><strong>Date:</strong> {{ date_req.selected_date.strftime('%A, %B %d, %Y') }}</p>
+        <p><strong>Time:</strong> {{ date_req.selected_time }}</p>
+        {% if date_req.location %}
+        <p><strong>Place:</strong> {{ date_req.location }}</p>
+        {% endif %}
+        <p><strong>Payment:</strong> <span class="status-pending">Verification Pending</span></p>
+        {% if date_req.transaction_id %}
+        <p><strong>Ref:</strong> {{ date_req.transaction_id }}</p>
+        {% endif %}
+    </div>
+
+    <p class="cute-text">
+        We've notified the host. Once they confirm the payment of NPR {{ amount }}, 
+        your date will be officially locked in! ✨
+    </p>
+
+    <p class="tiny-note">You can safely close this page. A confirmation will appear once verified.</p>
+
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to start ♥</a>
+</div>
+{% endblock %}

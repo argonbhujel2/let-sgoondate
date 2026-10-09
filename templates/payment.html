@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card payment-card fade-in">
+    <h1 class="main-heading">one small fee</h1>
+    <p class="subtitle">To confirm our date, please complete the payment below. 💗</p>
+
+    <div class="fee-card">
+        <div class="fee-header">
+            <span class="fee-badge">Date Agreement™</span>
+        </div>
+        <div class="fee-amount">
+            NPR {{ "{:,}".format(amount) }}
+        </div>
+        <p class="fee-subtitle">one-time fee • date confirmation • made with love 💕</p>
+    </div>
+
+    <div class="payment-info">
+        <p>This is a playful date-confirmation payment of <strong>NPR {{ amount }}</strong>.</p>
+        <p>Recipient: <strong>{{ recipient }}</strong></p>
+        <p class="tiny-note">You'll scan a QR code on the next screen to complete payment.</p>
+    </div>
+
+    <a href="{{ url_for('payment_qr') }}" class="btn btn-primary full-width">
+        Pay Rs. {{ amount }} 💝
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card invitation-card fade-in">
+    <div class="photo-wrapper">
+        <img src="{{ url_for('static', filename='images/dog.jpg') }}" alt="Cute dog" class="profile-photo" onerror="this.src='https://placehold.co/200x200/ffc0cb/fff?text=🐶'">
+        <div class="photo-ring"></div>
+    </div>
+
+    <h1 class="main-heading">🌸 Will you go on a date with me? 🌸</h1>
+    <p class="subtitle">I promise it will be the cutest adventure…</p>
+
+    <div class="button-group">
+        <button id="yesBtn" class="btn btn-yes">YES ♥</button>
+        <button id="noBtn" class="btn btn-no">no 🐾</button>
+    </div>
+
+    <p class="tiny-note">psst… the no button is a little shy 🙈</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+
+    yesBtn.addEventListener('click', async () => {
+        yesBtn.disabled = true;
+        yesBtn.textContent = 'Yay! 💕';
+        try {
+            await fetch('/api/say-yes', { method: 'POST' });
+        } catch (e) {}
+        document.querySelector('.invitation-card').classList.add('fade-out');
+        setTimeout(() => {
+            window.location.href = '/surprise';
+        }, 500);
+    });
+
+    // Playful NO button
+    let noClicks = 0;
+    const moveNo = () => {
+        noClicks++;
+        const maxX = window.innerWidth - noBtn.offsetWidth - 40;
+        const maxY = window.innerHeight - noBtn.offsetHeight - 40;
+        const x = Math.random() * maxX;
+        const y = Math.random() * maxY;
+        noBtn.style.position = 'fixed';
+        noBtn.style.left = `${x}px`;
+        noBtn.style.top = `${y}px`;
+        noBtn.style.zIndex = '1000';
+        noBtn.style.transition = 'all 0.25s ease';
+
+        if (noClicks > 6) {
+            noBtn.textContent = 'okay fine 🥺';
+        } else if (noClicks > 3) {
+            noBtn.textContent = 'please? 🐾';
+        }
+    };
+
+    noBtn.addEventListener('mouseenter', moveNo);
+    noBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        moveNo();
+    });
+
+    // Touch support for mobile
+    noBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        moveNo();
+    }, { passive: false });
+});
+</script>
+{% endblock %}

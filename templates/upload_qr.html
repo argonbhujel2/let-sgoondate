@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Payment QR{% endblock %}
+
+{% block content %}
+<div class="card form-card fade-in">
+    <h1 class="main-heading">📷 Upload Payment QR</h1>
+    <p class="subtitle">Upload your eSewa / Khalti / Bank QR image</p>
+
+    <div class="status-box">
+        <p><strong>Cloudinary:</strong> {{ cloudinary_status }}</p>
+        <p class="tiny-note">When Cloudinary is enabled, the image is stored in the cloud (perfect for Vercel).</p>
+    </div>
+
+    {% if current_qr %}
+    <div class="qr-wrapper" style="margin: 1.25rem auto;">
+        <p style="margin-bottom:0.5rem;font-weight:600;">Current QR</p>
+        <img src="{{ current_qr }}" alt="Current QR" class="qr-image"
+             onerror="this.style.display='none'">
+    </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" class="proof-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="form-group">
+            <label for="qr_image">Choose QR image</label>
+            <input type="file" id="qr_image" name="qr_image"
+                   accept="image/png,image/jpeg,image/jpg,image/gif,image/webp" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary full-width">
+            Upload QR 💝
+        </button>
+    </form>
+
+    <p class="tiny-note" style="margin-top:1.25rem;">
+        Page: <code>/upload</code> — no password required
+    </p>
+</div>
+{% endblock %}

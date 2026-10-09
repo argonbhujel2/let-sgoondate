@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Owner Login – Upload QR{% endblock %}
+
+{% block content %}
+<div class="card form-card fade-in">
+    <h1 class="main-heading">🔒 Owner Access</h1>
+    <p class="subtitle">Enter your secret key to upload the payment QR</p>
+
+    <form method="POST" class="date-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="action" value="login">
+
+        <div class="form-group">
+            <label for="secret_key">Secret Key</label>
+            <input type="password" id="secret_key" name="secret_key"
+                   placeholder="Your SECRET_KEY from .env" required autocomplete="off">
+        </div>
+
+        <button type="submit" class="btn btn-primary full-width">
+            Unlock Upload ♥
+        </button>
+    </form>
+
+    <p class="tiny-note" style="margin-top:1.5rem;">
+        Tip: you can also open<br>
+        <code>/upload?key=YOUR_SECRET_KEY</code>
+    </p>
+</div>
+{% endblock %}

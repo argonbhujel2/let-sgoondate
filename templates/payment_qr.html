@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card qr-card fade-in">
+    <h1 class="main-heading">Scan to Pay 💝</h1>
+    <p class="subtitle">Please scan the QR code to pay <strong>NPR {{ amount }}</strong>.</p>
+
+    <div class="qr-wrapper">
+        <img src="{{ qr_url }}"
+             alt="Payment QR Code"
+             class="qr-image"
+             onerror="this.src='https://placehold.co/280x280/fce7f3/db2777?text=QR+Code'">
+    </div>
+
+    <div class="payment-details">
+        <p><strong>Amount:</strong> NPR {{ amount }}</p>
+        <p><strong>Recipient:</strong> {{ recipient }}</p>
+        <p class="tiny-note">After paying, enter the transaction ID or upload a screenshot below.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('payment_qr') }}" enctype="multipart/form-data" class="proof-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="form-group">
+            <label for="transaction_id">🧾 Transaction / Reference ID</label>
+            <input type="text" id="transaction_id" name="transaction_id"
+                   placeholder="e.g. eSewa / Khalti reference number" maxlength="100">
+        </div>
+
+        <div class="form-group">
+            <label for="proof">📸 Payment Screenshot <span class="optional">(optional)</span></label>
+            <input type="file" id="proof" name="proof" accept="image/*,.pdf">
+        </div>
+
+        <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+                <input type="checkbox" name="payment_confirmed" id="payment_confirmed">
+                <span>I have completed the payment of NPR {{ amount }}.</span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary full-width" id="paidBtn">
+            I've paid! 💗
+        </button>
+    </form>
+
+    <p class="tiny-note warning-note">
+        ⚠️ Payment will be marked as <em>verification pending</em> until the recipient confirms it.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.proof-form');
+    const btn = document.getElementById('paidBtn');
+    form.addEventListener('submit', () => {
+        btn.disabled = true;
+        btn.textContent = 'Submitting… 💕';
+    });
+});
+</script>
+{% endblock %}

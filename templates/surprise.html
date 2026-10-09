@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card surprise-card fade-in">
+    <div class="emoji-bounce">🥜</div>
+    <h1 class="main-heading">WAIT YOU ACTUALLY SAID YES?? 😭</h1>
+    <p class="subtitle">I was so ready for you to say no 🥹</p>
+    <p class="cute-text">My heart is doing cartwheels right now…</p>
+
+    <a href="{{ url_for('choose_date') }}" class="btn btn-primary">
+        okay okay! →
+    </a>
+</div>
+{% endblock %}

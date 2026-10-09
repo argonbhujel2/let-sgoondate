@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card confirmation-card fade-in">
+    <div class="confetti-container" id="confetti"></div>
+
+    <div class="emoji-bounce big">🎉</div>
+    <h1 class="main-heading">IT'S A DATE!! 💗🥹</h1>
+    <p class="subtitle">Our date is officially confirmed!</p>
+
+    <div class="status-box success">
+        <p><strong>📅 Date:</strong> {{ date_req.selected_date.strftime('%A, %B %d, %Y') }}</p>
+        <p><strong>⏰ Time:</strong> {{ date_req.selected_time }}</p>
+        {% if date_req.location %}
+        <p><strong>📍 Place:</strong> {{ date_req.location }}</p>
+        {% endif %}
+        {% if date_req.personal_message %}
+        <p><strong>💌 Note:</strong> {{ date_req.personal_message }}</p>
+        {% endif %}
+        <p><strong>Payment:</strong> <span class="status-verified">Verified ✓</span></p>
+    </div>
+
+    <p class="romantic-message">
+        Can't wait to see you… it's going to be magical ✨💕
+    </p>
+
+    <a href="{{ url_for('index') }}" class="btn btn-primary">
+        Back to our memories ♥
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Simple confetti
+function createConfetti() {
+    const container = document.getElementById('confetti');
+    const colors = ['#f9a8d4', '#c4b5fd', '#a5f3fc', '#fde68a', '#fda4af'];
+    for (let i = 0; i < 60; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left = Math.random() * 100 + '%';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.animationDelay = Math.random() * 3 + 's';
+        el.style.animationDuration = (2 + Math.random() * 2) + 's';
+        container.appendChild(el);
+    }
+}
+document.addEventListener('DOMContentLoaded', createConfetti);
+</script>
+{% endblock %}

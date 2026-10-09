@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Payment{% endblock %}
+
+{% block content %}
+<div class="card form-card fade-in">
+    <h1 class="main-heading">Payment Verification</h1>
+    <p class="subtitle">Request ID: <code>{{ date_req.id }}</code></p>
+
+    <div class="status-box">
+        <p><strong>Date:</strong> {{ date_req.selected_date.strftime('%A, %B %d, %Y') }}</p>
+        <p><strong>Time:</strong> {{ date_req.selected_time }}</p>
+        <p><strong>Location:</strong> {{ date_req.location or '—' }}</p>
+        <p><strong>Message:</strong> {{ date_req.personal_message or '—' }}</p>
+        <p><strong>Transaction ID:</strong> {{ date_req.transaction_id or '—' }}</p>
+        <p><strong>Proof:</strong>
+            {% if date_req.proof_url %}
+                <a href="{{ date_req.proof_url }}" target="_blank" rel="noopener">View proof ↗</a>
+            {% else %}
+                {{ date_req.proof_filename or '—' }}
+            {% endif %}
+        </p>
+        <p><strong>Current status:</strong>
+            <span class="status-{{ date_req.payment_status }}">{{ date_req.payment_status }}</span>
+        </p>
+    </div>
+
+    {% if date_req.payment_status != 'verified' %}
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="button-group">
+            <button type="submit" name="action" value="verify" class="btn btn-yes">Mark as Verified ✓</button>
+            <button type="submit" name="action" value="reject" class="btn btn-no">Reject</button>
+        </div>
+    </form>
+    {% else %}
+    <p class="cute-text">Already verified 💕</p>
+    {% endif %}
+</div>
+{% endblock %}

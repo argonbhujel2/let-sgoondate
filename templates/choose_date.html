@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card form-card fade-in">
+    <h1 class="main-heading">🐾 So... when are you free?</h1>
+    <p class="subtitle">Pick a day that feels just right ✨</p>
+
+    <form method="POST" action="{{ url_for('choose_date') }}" class="date-form" id="dateForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="form-group">
+            <label for="selected_date">📅 Preferred Date</label>
+            <input type="date" id="selected_date" name="selected_date"
+                   value="{{ selected_date or '' }}" required
+                   min="{{ (now or '') }}">
+        </div>
+
+        <div class="form-group">
+            <label for="selected_time">⏰ Preferred Time</label>
+            <select id="selected_time" name="selected_time" required>
+                <option value="" disabled {% if not selected_time %}selected{% endif %}>Choose a time…</option>
+                {% for t in ['10:00 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM', '7:00 PM'] %}
+                <option value="{{ t }}" {% if selected_time == t %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="location">📍 Meeting Place <span class="optional">(optional)</span></label>
+            <input type="text" id="location" name="location"
+                   placeholder="e.g. that cute café we love…"
+                   value="{{ location or '' }}" maxlength="200">
+        </div>
+
+        <div class="form-group">
+            <label for="personal_message">💌 A little note <span class="optional">(optional)</span></label>
+            <textarea id="personal_message" name="personal_message"
+                      rows="3" maxlength="500"
+                      placeholder="Anything you want to say…">{{ personal_message or '' }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary full-width" id="submitBtn">
+            set the date! ♥
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Set min date to today
+    const dateInput = document.getElementById('selected_date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+    if (!dateInput.value) dateInput.value = today;
+
+    const form = document.getElementById('dateForm');
+    const btn = document.getElementById('submitBtn');
+    form.addEventListener('submit', () => {
+        btn.disabled = true;
+        btn.textContent = 'Saving… 💕';
+    });
+});
+</script>
+{% endblock %}
